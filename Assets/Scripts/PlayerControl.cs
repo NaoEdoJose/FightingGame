@@ -39,6 +39,20 @@ public class PlayerControl : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
 
+		jmpForce = JumpForce;
+
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+
+		foreach (GameObject pl in players) {
+		
+			if(pl.transform != this.transform){
+
+				enemy = pl.transform;
+			}
+
+		}
+
+
 
 
     }
@@ -78,8 +92,10 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         AttackInput();
-        UpdateAnimator();
+		ScaleCheck ();
+		UpdateAnimator();
         OnGroundCheck();
+
     }
     void FixedUpdate()
     {
@@ -132,13 +148,22 @@ public class PlayerControl : MonoBehaviour
     {
         if (!onGround)
         {
-            rb2d.gravityScale = 5;
+            rb2d.gravityScale = 4;
         }
         else
         {
             rb2d.gravityScale = 1;
         }
     }
+
+	void ScaleCheck(){
+	 	
+		if (transform.position.x < enemy.position.x)
+			transform.localScale = new Vector3 (-1, 1, 1);
+		else
+			transform.localScale = Vector3.one;
+	
+	}
 
     void AttackInput()
     {
